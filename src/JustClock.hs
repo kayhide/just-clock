@@ -8,12 +8,13 @@ module JustClock
     ) where
 
 import Reflex.Dom
-import Control.Monad
 import Data.Time.Clock as Time
+import Data.Time.LocalTime as Time
 
 main :: IO ()
 main = do
   startTime <- Time.getCurrentTime
+  zone <- Time.getCurrentTimeZone
   mainWidget $ do
     tick <- tickLossy 1 startTime
     now <- foldDyn (const._tickInfo_lastUTC) startTime tick
@@ -23,3 +24,21 @@ main = do
     el "div" $ do
       text "time: "
       display now
+    t <- mapDyn (utcToLocalTime zone) now
+    el "div" $ do
+      text "local time: "
+      display t
+    el "div" $ do
+      tod <- mapDyn localTimeOfDay t
+      dyn =<< mapDyn displayTimeOfDay tod
+      return ()
+
+displayTimeOfDay :: MonadWidget t m => TimeOfDay -> m ()
+displayTimeOfDay tod = do
+  text "hour: "
+  text $ show $ todHour tod
+  text ", min: "
+  text $ show $ todMin tod
+  text ", sec: "
+  text $ show $ todSec tod
+  return ()
