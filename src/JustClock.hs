@@ -3,15 +3,16 @@
 {-# LANGUAGE RecursiveDo #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Lib
-    ( someFunc
+module JustClock
+    ( main
     ) where
 
 import Reflex.Dom
 import Control.Monad
 import Data.Time.Clock as Time
 
-someFunc = do
+main :: IO ()
+main = do
   startTime <- Time.getCurrentTime
   mainWidget $ do
     tick <- tickLossy 1 startTime

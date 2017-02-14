@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import qualified JustClock
 
 main :: IO ()
-main = someFunc
+main = JustClock.main
