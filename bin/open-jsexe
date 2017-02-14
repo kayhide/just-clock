@@ -1,0 +1,14 @@
+#! /bin/sh
+
+root=$(stack path --project-root)
+name=$(basename $root)
+dist_dir=$(stack path --dist-dir)
+jsexe_dir=$dist_dir/build/$name/$name.jsexe
+index=$jsexe_dir/index.html
+
+if [ ! -f $index ]; then
+   echo "jsexe files are not found."
+   exit 1
+fi
+
+open $index
