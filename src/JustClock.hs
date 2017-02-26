@@ -48,16 +48,21 @@ displayTimeOfDay tod = do
 
 
 svgElDynAttr' :: MonadWidget t m => String -> Dynamic t (Map String String) -> m a -> m (El t, a)
-svgElDynAttr' el attrs m = elDynAttrNS' ns el attrs m
+svgElDynAttr' name attrs m = elDynAttrNS' ns name attrs m
   where ns = Just "http://www.w3.org/2000/svg"
 
 svgElDynAttr :: MonadWidget t m => String -> Dynamic t (Map String String) -> m a -> m ()
-svgElDynAttr el attrs m = do
-  svgElDynAttr' el attrs m
+svgElDynAttr name attrs m = do
+  _ <- svgElDynAttr' name attrs m
   return ()
 
-width = 400 :: Double
+width :: Double
+width = 400
+
+height :: Double
 height = 400 :: Double
+
+svgAttrs :: Map String String
 svgAttrs = fromList [ ("viewBox", box)
                     , ("width", show width)
                     , ("height", show height)
