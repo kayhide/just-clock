@@ -1,16 +1,12 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE RecursiveDo #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-
 module JustClock
     ( main
     ) where
 
-import Data.Map (Map, fromList)
 import Data.Time.Clock
 import Data.Time.LocalTime
 import Reflex.Dom
+
+import qualified JustClock.Widget as W
 
 main :: IO ()
 main = do
@@ -33,7 +29,7 @@ main = do
     el "div" $ do
       _ <- dyn =<< mapDyn displayTimeOfDay tod
       return ()
-    _ <- dyn =<< mapDyn displayClock tod
+    _ <- dyn =<< mapDyn W.clock tod
     return ()
 
 displayTimeOfDay :: MonadWidget t m => TimeOfDay -> m ()
@@ -44,54 +40,3 @@ displayTimeOfDay tod = do
   text $ show $ todMin tod
   text ", sec: "
   text $ show $ todSec tod
-  return ()
-
-
-svgElDynAttr' :: MonadWidget t m => String -> Dynamic t (Map String String) -> m a -> m (El t, a)
-svgElDynAttr' name attrs m = elDynAttrNS' ns name attrs m
-  where ns = Just "http://www.w3.org/2000/svg"
-
-svgElDynAttr :: MonadWidget t m => String -> Dynamic t (Map String String) -> m a -> m ()
-svgElDynAttr name attrs m = do
-  _ <- svgElDynAttr' name attrs m
-  return ()
-
-width :: Double
-width = 400
-
-height :: Double
-height = 400 :: Double
-
-svgAttrs :: Map String String
-svgAttrs = fromList [ ("viewBox", box)
-                    , ("width", show width)
-                    , ("height", show height)
-                    ]
-  where box = show (-width / 2)
-              ++ " " ++ show (-height /2)
-              ++ " " ++ show width
-              ++ " " ++ show height
-
-type Circle = ((String, Double), (Double, Double))
-
-showCircle :: MonadWidget t m => Circle -> Int -> m ()
-showCircle ((color, radius), (x, y)) degree = do
-  svgElDynAttr "circle" (constDyn circleAttrs) $ return ()
-  where circleAttrs = fromList [ ("cx", show x)
-                               , ("cy", show y)
-                               , ("r", show radius)
-                               , ("style", "fill:" ++ color)
-                               , ("transform", "rotate(" ++ show degree ++ ")")
-                               ]
-
-displayClock :: MonadWidget t m => TimeOfDay -> m ()
-displayClock tod = do
-  svgElDynAttr "svg" (constDyn svgAttrs) $ do
-    showCircle (("Black", 10), (0, 0)) 0
-    showCircle (("Black", 5), (0, -80)) secDegree
-    showCircle (("Cyan", 8), (0, -60)) minDegree
-    showCircle (("Blue", 10), (0, -30)) hourDegree
-    mapM_ (showCircle (("Lime", 2), (0, -100))) $ map (30*) [0..11]
-  where hourDegree = 360 `div` 12 * (todHour tod `mod` 12)
-        minDegree = 360 `div` 60 * (todMin tod)
-        secDegree = 360 `div` 60 * floor (todSec tod)
