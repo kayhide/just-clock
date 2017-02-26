@@ -13,7 +13,7 @@ main = do
   startTime <- getCurrentTime
   zone <- getCurrentTimeZone
   mainWidget $ do
-    tick <- tickLossy 1 startTime
+    tick <- tickLossy 0.1 startTime
     now <- holdDyn startTime $ _tickInfo_lastUTC <$> tick
     el "div" $ do
       text "count: "
@@ -21,7 +21,12 @@ main = do
     el "div" $ do
       text "time: "
       display now
-    t <- mapDyn (utcToLocalTime zone) now
+    sec <- mapDyn (floor . utctDayTime) now
+    now' <- holdDyn startTime $ tagDyn now $ updated $ nubDyn sec
+    el "div" $ do
+      text "time: "
+      display now'
+    t <- mapDyn (utcToLocalTime zone) now'
     tod <- mapDyn localTimeOfDay t
     el "div" $ do
       text "local time: "
