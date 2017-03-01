@@ -11,4 +11,8 @@ if [ ! -f $index ]; then
    exit 1
 fi
 
-open $index
+if which browser-sync > /dev/null; then
+    browser-sync start --server --ss "$jsexe_dir" --files "$jsexe_dir/*.js"
+else
+    open $index
+fi
