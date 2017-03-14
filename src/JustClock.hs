@@ -13,16 +13,16 @@ main = do
   startTime <- getCurrentTime
   zone <- getCurrentTimeZone
   mainWidget $ do
-    tick <- tickLossy 0.1 startTime
+    tick <- tickLossy 0.05 startTime
     now <- holdDyn startTime $ _tickInfo_lastUTC <$> tick
+    sec <- mapDyn (floor . utctDayTime) now
+    now' <- holdDyn startTime $ tagDyn now $ updated $ nubDyn sec
     el "div" $ do
       text "count: "
       display =<< count tick
     el "div" $ do
       text "time: "
       display now
-    sec <- mapDyn (floor . utctDayTime) now
-    now' <- holdDyn startTime $ tagDyn now $ updated $ nubDyn sec
     el "div" $ do
       text "time: "
       display now'
@@ -32,16 +32,15 @@ main = do
       text "local time: "
       display t
     el "div" $ do
-      _ <- dyn =<< mapDyn displayTimeOfDay tod
-      return ()
-    _ <- dyn =<< mapDyn W.clock tod
+      displayTimeOfDay tod
+    W.displayClock tod
     return ()
 
-displayTimeOfDay :: MonadWidget t m => TimeOfDay -> m ()
+displayTimeOfDay :: MonadWidget t m => Dynamic t TimeOfDay -> m ()
 displayTimeOfDay tod = do
   text "hour: "
-  text $ show $ todHour tod
+  display =<< mapDyn todHour tod
   text ", min: "
-  text $ show $ todMin tod
+  display =<< mapDyn todMin tod
   text ", sec: "
-  text $ show $ todSec tod
+  display =<< mapDyn todSec tod

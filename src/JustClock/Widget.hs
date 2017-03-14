@@ -1,5 +1,5 @@
 module JustClock.Widget
-  ( clock
+  ( displayClock
   ) where
 
 import Data.Map (Map, fromList)
@@ -50,14 +50,18 @@ showCircle ((color, radius), (x, y)) degree = do
                                , ("transform", "rotate(" ++ show degree ++ ")")
                                ]
 
-clock :: MonadWidget t m => TimeOfDay -> m ()
-clock tod = do
+displayClock :: MonadWidget t m => Dynamic t TimeOfDay -> m ()
+displayClock tod = do
+  hour <- mapDyn hourDegree tod
+  min <- mapDyn minDegree tod
+  sec <- mapDyn secDegree tod
   svgAttr "svg" svgAttrs $ do
     showCircle (("Black", 10), (0, 0)) 0
-    showCircle (("Black", 5), (0, -80)) secDegree
-    showCircle (("Cyan", 8), (0, -60)) minDegree
-    showCircle (("Blue", 10), (0, -30)) hourDegree
     mapM_ (showCircle (("Lime", 2), (0, -100))) $ map (30*) [0..11]
-  where hourDegree = 360 `div` 12 * (todHour tod `mod` 12)
-        minDegree = 360 `div` 60 * (todMin tod)
-        secDegree = 360 `div` 60 * floor (todSec tod)
+    _ <- dyn =<< mapDyn (showCircle (("Black", 5), (0, -80))) sec
+    _ <- dyn =<< mapDyn (showCircle (("Cyan", 8), (0, -60))) min
+    _ <- dyn =<< mapDyn (showCircle (("Blue", 10), (0, -30))) hour
+    return ()
+  where hourDegree tod = 360 `div` 12 * (todHour tod `mod` 12)
+        minDegree tod = 360 `div` 60 * (todMin tod)
+        secDegree tod = 360 `div` 60 * floor (todSec tod)
