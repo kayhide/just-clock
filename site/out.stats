@@ -1,35 +1,34 @@
 code size summary per package:
 
-2OKsHPUiwGQ5u9kArYgwpP:  373199
+2OKsHPUiwGQ5u9kArYgwpP:  358646
 3NmPKxtL2IVDkaAOXpbROw:  16347
 4FrCoobI4sE5jk0XQiKuLo:  780
 4gT3fmvlGJR4D8pdYSG3Wn:  9677
 4ms3npANH8g7jD1infpHjP:  4363
+7TGbYok8bww7H3ehnr3KAL:  130687
 9JlfBTmU3rJFFnaVQB5UX1:  50843
 9yf3GJayHIN3lnyjD2ewhx:  2145
-ANkDs4SFicBJT8UYMwXpoI:  393084
-BoCXXpIUT3LAm5j5Xj4gIW:  49681
-CgnxfvAj177CMQHeNemIbS:  2709
-D0nns1sBg91LSATl4i2rUT:  116337
+ANkDs4SFicBJT8UYMwXpoI:  392616
+BoCXXpIUT3LAm5j5Xj4gIW:  49395
+CgnxfvAj177CMQHeNemIbS:  2693
 EsdRJS9BMSeIjYCdJJCbaj:  146685
 FHI0DNhgbC18st1z2BRIoI:  98724
-FkQsLwAdqz5GYhlQN7pQ69:  10987
-KwAZMPHaprOG2bVKXhbr0I:  29321
-LC6eNkiSjonGvMrrp59Lxe:  1024
+FkQsLwAdqz5GYhlQN7pQ69:  10985
+KwAZMPHaprOG2bVKXhbr0I:  19648
 LhshFbKWHVsARXg9bEL8XJ:  1143
-base:                    450970
-ghc-prim:                19552
+base:                    420828
+ghc-prim:                19224
 integer-gmp:             42144
-main:                    522
+main:                    528
 
 
 code size per module:
 
 2OKsHPUiwGQ5u9kArYgwpP
     Reflex.Dom.Class:                   26128
-    Reflex.Dom.Internal:                76856
+    Reflex.Dom.Internal:                56669
     Reflex.Dom.Time:                    8479
-    Reflex.Dom.Widget.Basic:            261736
+    Reflex.Dom.Widget.Basic:            267370
 
 3NmPKxtL2IVDkaAOXpbROw
     Control.Monad.IO.Class:             717
@@ -46,6 +45,10 @@ code size per module:
 
 4ms3npANH8g7jD1infpHjP
     Control.Monad.Exception:            4363
+
+7TGbYok8bww7H3ehnr3KAL
+    JustClock:                          102431
+    JustClock.Widget:                   28256
 
 9JlfBTmU3rJFFnaVQB5UX1
     Data.Time.Calendar.Gregorian:       5016
@@ -64,23 +67,19 @@ code size per module:
     Data.Aeson.Types.Instances:         2145
 
 ANkDs4SFicBJT8UYMwXpoI
-    Data.Functor.Misc:                  3066
+    Data.Functor.Misc:                  3634
     Reflex.Class:                       25978
     Reflex.Dynamic:                     11540
     Reflex.Host.Class:                  1878
-    Reflex.Spider.Internal:             350622
+    Reflex.Spider.Internal:             349586
 
 BoCXXpIUT3LAm5j5Xj4gIW
-    Data.Dependent.Map:                 17215
-    Data.Dependent.Map.Internal:        32466
+    Data.Dependent.Map:                 17108
+    Data.Dependent.Map.Internal:        32287
 
 CgnxfvAj177CMQHeNemIbS
-    Data.Dependent.Sum:                 616
-    Data.GADT.Compare:                  2093
-
-D0nns1sBg91LSATl4i2rUT
-    JustClock:                          88472
-    JustClock.Widget:                   27865
+    Data.Dependent.Sum:                 614
+    Data.GADT.Compare:                  2079
 
 EsdRJS9BMSeIjYCdJJCbaj
     GHCJS.DOM:                          4905
@@ -99,19 +98,13 @@ FHI0DNhgbC18st1z2BRIoI
 
 FkQsLwAdqz5GYhlQN7pQ69
     GHCJS.Prim:                         6561
-    GHCJS.Prim.Internal:                4426
+    GHCJS.Prim.Internal:                4424
 
 KwAZMPHaprOG2bVKXhbr0I
     Data.Text:                          3179
     Data.Text.Array:                    874
-    Data.Text.Encoding.Error:           6472
     Data.Text.Internal:                 1198
-    Data.Text.Internal.Encoding.Fusion: 1739
-    Data.Text.Internal.Fusion.Types:    1462
     Data.Text.Show:                     14397
-
-LC6eNkiSjonGvMrrp59Lxe
-    Data.ByteString.Internal:           1024
 
 LhshFbKWHVsARXg9bEL8XJ
     Control.Monad.Ref:                  1143
@@ -134,7 +127,7 @@ base
     GHC.Arr:                            3643
     GHC.Base:                           6968
     GHC.Conc.Sync:                      7822
-    GHC.Enum:                           26856
+    GHC.Enum:                           19566
     GHC.Err:                            382
     GHC.Exception:                      9546
     GHC.Float:                          56307
@@ -160,20 +153,19 @@ base
     GHC.MVar:                           188
     GHC.Num:                            3347
     GHC.Ptr:                            188
-    GHC.Real:                           24666
+    GHC.Real:                           24129
     GHC.ST:                             186
     GHC.STRef:                          648
     GHC.Show:                           21868
     GHC.Storable:                       1084
     GHC.TopHandler:                     13541
     GHC.Weak:                           188
-    GHC.Word:                           17561
-    Numeric:                            5104
+    GHC.Word:                           350
     System.Posix.Internals:             16119
 
 ghc-prim
-    GHC.CString:                        4517
-    GHC.Classes:                        12302
+    GHC.CString:                        4515
+    GHC.Classes:                        11976
     GHC.IntWord64:                      146
     GHC.Tuple:                          1098
     GHC.Types:                          1489
@@ -183,9 +175,9 @@ integer-gmp
     GHC.Integer.Type:                   41811
 
 main
-    Main:                               522
+    Main:                               528
 
 
 
-packed metadata: 352867
+packed metadata: 344771
 
