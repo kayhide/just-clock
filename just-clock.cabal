@@ -18,6 +18,7 @@ library
   exposed-modules:     JustClock
   other-modules:       JustClock.Widget
   build-depends:       base >= 4.7 && < 5
+                     , text
                      , containers
                      , mtl
                      , time

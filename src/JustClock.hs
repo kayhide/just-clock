@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module JustClock
     ( main
     ) where
@@ -31,24 +33,15 @@ main = do
   mainWidgetWithHead headElement $ do
     tick <- tickLossy 0.05 startTime
     now <- holdDyn startTime $ _tickInfo_lastUTC <$> tick
-    sec <- mapDyn (floor . utctDayTime) now
-    now' <- holdDyn startTime $ tagDyn now $ updated $ nubDyn sec
-    el "div" $ do
-      text "count: "
-      display =<< count tick
-    el "div" $ do
-      text "time: "
-      display now
-    el "div" $ do
-      text "time: "
-      display now'
-    t <- mapDyn (utcToLocalTime zone) now'
-    tod <- mapDyn localTimeOfDay t
-    el "div" $ do
-      text "local time: "
-      display t
-    el "div" $ do
-      displayTimeOfDay tod
+    let sec = floor . utctDayTime <$> now
+    now' <- holdDyn startTime $ tagPromptlyDyn now $ updated $ uniqDyn sec
+    let t = utcToLocalTime zone <$> now'
+        tod = localTimeOfDay <$> t
+    el "div" $ text "count: " >> count tick >>= display
+    el "div" $ text "time: " >> display now
+    el "div" $ text "time: " >> display now'
+    el "div" $ text "local time: " >> display t
+    el "div" $ displayTimeOfDay tod
     W.displayClock tod
     el "div" $ do
       linkClass "Push me" "mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent"
@@ -61,9 +54,6 @@ main = do
 
 displayTimeOfDay :: MonadWidget t m => Dynamic t TimeOfDay -> m ()
 displayTimeOfDay tod = do
-  text "hour: "
-  display =<< mapDyn todHour tod
-  text ", min: "
-  display =<< mapDyn todMin tod
-  text ", sec: "
-  display =<< mapDyn todSec tod
+  text "hour: " >> display (todHour <$> tod)
+  text ", min: " >> display (todMin <$> tod)
+  text ", sec: " >> display (todSec <$> tod)
